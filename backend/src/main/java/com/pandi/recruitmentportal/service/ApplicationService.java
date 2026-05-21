@@ -7,6 +7,7 @@ import com.pandi.recruitmentportal.repository.ApplicationRepository;
 import com.pandi.recruitmentportal.repository.JobPositionRepository;
 import com.pandi.recruitmentportal.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.pandi.recruitmentportal.entity.ApplicationStatus;
 
 import java.util.List;
 
@@ -46,4 +47,15 @@ public class ApplicationService {
 
         return applicationRepository.save(application);
     }
+    public Application updateStatus(Long applicationId,
+                                ApplicationStatus status) {
+
+        Application application = applicationRepository
+                .findById(applicationId)
+                .orElseThrow();
+
+        application.setStatus(status);
+
+        return applicationRepository.save(application);
+    }  
 }

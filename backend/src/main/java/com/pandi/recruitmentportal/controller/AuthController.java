@@ -8,6 +8,7 @@ import com.pandi.recruitmentportal.repository.UserRepository;
 import com.pandi.recruitmentportal.security.JwtService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.pandi.recruitmentportal.exception.DuplicateResourceException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,7 +28,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthResponse register(@RequestBody AuthRequest request) {
-
+      
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new DuplicateResourceException("Email already exists");
+        }
         User user = new User();
 
         user.setEmail(request.getEmail());
