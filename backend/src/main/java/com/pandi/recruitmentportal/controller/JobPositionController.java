@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import com.pandi.recruitmentportal.entity.User;
 import com.pandi.recruitmentportal.repository.UserRepository;
 import com.pandi.recruitmentportal.security.JwtService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,6 +32,11 @@ public class JobPositionController {
     @GetMapping
     public List<JobPosition> getAllJobs() {
         return jobPositionService.getAllJobs();
+    }
+
+    @GetMapping("/paginated")
+    public Page<JobPosition> getPaginatedJobs(Pageable pageable) {
+        return jobPositionService.getPaginatedJobs(pageable);
     }
 
     @PostMapping

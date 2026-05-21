@@ -3,6 +3,8 @@ package com.pandi.recruitmentportal.service;
 import com.pandi.recruitmentportal.entity.JobPosition;
 import com.pandi.recruitmentportal.repository.JobPositionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,5 +23,8 @@ public class JobPositionService {
 
     public JobPosition saveJob(JobPosition jobPosition) {
         return jobPositionRepository.save(jobPosition);
+    }
+    public Page<JobPosition> getPaginatedJobs(Pageable pageable) {
+        return jobPositionRepository.findAll(pageable);
     }
 }
