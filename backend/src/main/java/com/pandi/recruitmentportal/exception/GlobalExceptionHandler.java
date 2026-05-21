@@ -21,6 +21,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(Map.of("message", exception.getMessage()));
     }
+    
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(
+            ResourceNotFoundException exception
+    ) {
+
+        return ResponseEntity
+                 .status(HttpStatus.NOT_FOUND)
+                 .body(Map.of("message", exception.getMessage()));
+    } 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(
