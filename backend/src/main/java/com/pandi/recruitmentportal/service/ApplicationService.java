@@ -7,6 +7,9 @@ import com.pandi.recruitmentportal.repository.ApplicationRepository;
 import com.pandi.recruitmentportal.repository.JobPositionRepository;
 import com.pandi.recruitmentportal.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.pandi.recruitmentportal.entity.ApplicationStatus;
+import com.pandi.recruitmentportal.exception.DuplicateResourceException;
+
 
 import java.util.List;
 
@@ -39,6 +42,10 @@ public class ApplicationService {
         JobPosition jobPosition = jobPositionRepository.findById(jobPositionId)
                 .orElseThrow();
 
+        if (applicationRepository.existsByUserAndJobPosition(user, jobPosition)) {
+            throw new DuplicateResourceException("User has already applied for this job");
+        }        
+
         Application application = new Application();
 
         application.setUser(user);
@@ -46,4 +53,15 @@ public class ApplicationService {
 
         return applicationRepository.save(application);
     }
+    public Application updateStatus(Long applicationId,
+                                ApplicationStatus status) {
+
+        Application application = applicationRepository
+                .findById(applicationId)
+                .orElseThrow();
+
+        application.setStatus(status);
+
+        return applicationRepository.save(application);
+    }  
 }

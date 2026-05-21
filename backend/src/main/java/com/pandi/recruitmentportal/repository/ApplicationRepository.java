@@ -12,4 +12,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findByUser(User user);
 
     List<Application> findByJobPosition(JobPosition jobPosition);
+
+    boolean existsByUserAndJobPosition(User user, JobPosition jobPosition);
 }
