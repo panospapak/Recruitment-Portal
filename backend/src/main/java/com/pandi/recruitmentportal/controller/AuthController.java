@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.pandi.recruitmentportal.exception.DuplicateResourceException;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -40,6 +44,7 @@ public class AuthController {
         user.setRole(Role.USER);
 
         userRepository.save(user);
+        logger.info("New user registered with email: {}", user.getEmail());
 
         String token = jwtService.generateToken(user.getEmail());
 
@@ -55,7 +60,7 @@ public class AuthController {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
-
+        logger.info("User logged in with email: {}", user.getEmail());
         String token = jwtService.generateToken(user.getEmail());
 
         return new AuthResponse(token);
