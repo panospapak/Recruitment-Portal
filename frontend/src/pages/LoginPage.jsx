@@ -15,6 +15,7 @@ function LoginPage() {
             const data = await login(email, password);
 
             localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
 
             console.log(data);
 

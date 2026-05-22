@@ -27,4 +27,8 @@ public class JobPositionService {
     public Page<JobPosition> getPaginatedJobs(Pageable pageable) {
         return jobPositionRepository.findAll(pageable);
     }
+    public void deleteJob(Long id) {
+
+        jobPositionRepository.deleteById(id);
+    }
 }

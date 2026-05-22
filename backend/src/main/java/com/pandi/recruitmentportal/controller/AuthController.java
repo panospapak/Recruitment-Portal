@@ -48,7 +48,7 @@ public class AuthController {
 
         String token = jwtService.generateToken(user.getEmail());
 
-        return new AuthResponse(token);
+        return new AuthResponse(token, user.getRole().name());
     }
 
     @PostMapping("/login")
@@ -63,6 +63,6 @@ public class AuthController {
         logger.info("User logged in with email: {}", user.getEmail());
         String token = jwtService.generateToken(user.getEmail());
 
-        return new AuthResponse(token);
+        return new AuthResponse(token, user.getRole().name());
     }
 }

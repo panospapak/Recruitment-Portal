@@ -69,4 +69,8 @@ public class ApplicationService {
 
         return applicationRepository.save(application);
     }
+
+    public List<Application> getApplicationsByUser(User user) {
+       return applicationRepository.findByUser(user);
+    }
 }

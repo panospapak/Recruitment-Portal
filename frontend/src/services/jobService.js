@@ -78,3 +78,17 @@ export const updateApplicationStatus = async (applicationId, status) => {
 
     return response.data;
 };
+
+export const deleteJob = async (jobId) => {
+
+    const token = localStorage.getItem("token");
+
+    await axios.delete(
+        `http://localhost:8080/api/jobs/${jobId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+};

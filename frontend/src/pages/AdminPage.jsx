@@ -1,11 +1,20 @@
 import { useState } from "react";
-import { createJob, getAllApplications, updateApplicationStatus } from "../services/jobService";
+import {
+    createJob,
+    getJobs,
+    getAllApplications,
+    updateApplicationStatus,
+    deleteJob
+} from "../services/jobService";
 
 function AdminPage() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
     const [employmentType, setEmploymentType] = useState("");
+
+    const [jobs, setJobs] = useState([]);
+    const [applications, setApplications] = useState([]);
 
     const handleCreateJob = async () => {
         try {
@@ -23,26 +32,54 @@ function AdminPage() {
             setDescription("");
             setLocation("");
             setEmploymentType("");
+
+            fetchJobs();
         } catch (error) {
             alert(error.response?.data?.message || "Failed to create job");
         }
     };
 
-    const [applications, setApplications] = useState([]);
+    const fetchJobs = async () => {
+        try {
+            const data = await getJobs();
+            setJobs(data);
+        } catch (error) {
+            alert("Failed to load jobs");
+        }
+    };
+
+    const handleDeleteJob = async (jobId) => {
+        try {
+            await deleteJob(jobId);
+            fetchJobs();
+        } catch (error) {
+            alert(error.response?.data?.message || "Failed to delete job");
+        }
+    };
 
     const fetchApplications = async () => {
-        const data = await getAllApplications();
-        setApplications(data);
+        try {
+            const data = await getAllApplications();
+            setApplications(data);
+        } catch (error) {
+            alert("Failed to load applications");
+        }
     };
 
     const handleStatusChange = async (applicationId, status) => {
-        await updateApplicationStatus(applicationId, status);
-        fetchApplications();
+        try {
+            await updateApplicationStatus(applicationId, status);
+            fetchApplications();
+        } catch (error) {
+            alert(error.response?.data?.message || "Failed to update status");
+        }
     };
 
     return (
         <div>
             <h1>Admin Dashboard</h1>
+
+            <h2>Create Job</h2>
 
             <input
                 placeholder="Job title"
@@ -79,6 +116,27 @@ function AdminPage() {
             <button onClick={handleCreateJob}>
                 Create Job
             </button>
+
+            <hr />
+
+            <h2>Manage Jobs</h2>
+
+            <button onClick={fetchJobs}>
+                Load Jobs
+            </button>
+
+            {jobs.map((job) => (
+                <div key={job.id}>
+                    <h3>{job.title}</h3>
+                    <p>{job.description}</p>
+                    <p>{job.location}</p>
+                    <p>{job.employmentType}</p>
+
+                    <button onClick={() => handleDeleteJob(job.id)}>
+                        Delete
+                    </button>
+                </div>
+            ))}
 
             <hr />
 

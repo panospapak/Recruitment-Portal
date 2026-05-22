@@ -42,6 +42,38 @@ public class ApplicationController {
         );
     }
 
+    @PostMapping("/me")
+    public Application applyAsLoggedInUser(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestBody ApplyRequest request
+    )  {
+         String token = authHeader.replace("Bearer ", "");
+
+         String email = jwtService.extractEmail(token);
+
+         User user = userRepository.findByEmail(email)
+                 .orElseThrow();
+
+         return applicationService.apply(
+                 user.getId(),
+                 request.getJobPositionId()
+         );
+    }
+
+    @GetMapping("/me")
+    public List<Application> getMyApplications(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.replace("Bearer ", "");
+
+        String email = jwtService.extractEmail(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow();
+
+      return applicationService.getApplicationsByUser(user);
+    }
+
     @PutMapping("/{id}/status")
     public Application updateStatus(
             @PathVariable Long id,

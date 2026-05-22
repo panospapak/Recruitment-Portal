@@ -59,4 +59,8 @@ public class JobPositionController {
 
        throw new RuntimeException("Access denied");
     }
+    @DeleteMapping("/{id}")
+    public void deleteJob(@PathVariable Long id) {
+        jobPositionService.deleteJob(id);
+    }
 }

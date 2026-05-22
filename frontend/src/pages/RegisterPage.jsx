@@ -12,6 +12,7 @@ function RegisterPage() {
             const data = await register(email, password);
 
             localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
 
             navigate("/jobs");
         } catch (error) {
