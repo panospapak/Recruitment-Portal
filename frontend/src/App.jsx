@@ -2,15 +2,13 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import JobsPage from "./pages/JobsPage";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/login">Login</Link> |{" "}
-        <Link to="/register">Register</Link> |{" "}
-        <Link to="/jobs">Jobs</Link>
-      </nav>
+      
+      <Navbar />
 
       <Routes>
         <Route path="/login" element={<LoginPage />} />

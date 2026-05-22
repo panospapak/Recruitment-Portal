@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getJobs } from "../services/jobService";
+import { getJobs, applyToJob } from "../services/jobService";
 
 function JobsPage() {
 
@@ -22,6 +22,30 @@ function JobsPage() {
         } catch (error) {
 
             console.error(error);
+        }
+    };
+    const handleApply = async (jobId) => {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+
+            alert("Please login first!");
+
+            return;
+        }
+
+        try {
+
+           await applyToJob(jobId);
+           alert("Application submitted successfully!");
+  
+        } catch (error) {
+
+            alert(
+                error.response?.data?.message
+                || "Application failed"
+            );
         }
     };
 
@@ -49,6 +73,10 @@ function JobsPage() {
                         <p>{job.location}</p>
 
                         <p>{job.employmentType}</p>
+
+                        <button onClick={() => handleApply(job.id)}>
+                            Apply
+                        </button>
 
                     </div>
                 ))

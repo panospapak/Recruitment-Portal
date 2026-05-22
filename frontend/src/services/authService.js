@@ -14,3 +14,14 @@ export const login = async (email, password) => {
 
     return response.data;
 };
+export const register = async (email, password) => {
+    const response = await axios.post(
+        `${API_URL}/register`,
+        {
+            email,
+            password
+        }
+    );
+
+    return response.data;
+};

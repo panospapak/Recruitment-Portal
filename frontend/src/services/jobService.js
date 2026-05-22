@@ -8,3 +8,20 @@ export const getJobs = async () => {
 
     return response.data;
 };
+export const applyToJob = async (jobPositionId) => {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post(
+        "http://localhost:8080/api/applications/me",
+        {
+            jobPositionId
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
