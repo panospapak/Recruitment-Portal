@@ -41,3 +41,40 @@ export const getMyApplications = async () => {
 
     return response.data;
 };
+
+export const createJob = async (job) => {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post(
+        "http://localhost:8080/api/jobs",
+        job,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+export const getAllApplications = async () => {
+    const response = await axios.get("http://localhost:8080/api/applications");
+    return response.data;
+};
+
+export const updateApplicationStatus = async (applicationId, status) => {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.put(
+        `http://localhost:8080/api/applications/${applicationId}/status`,
+        { status },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
