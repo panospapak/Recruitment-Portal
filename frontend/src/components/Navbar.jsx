@@ -27,6 +27,14 @@ function Navbar() {
 
             {" | "}
 
+            <Link to="/my-applications">My Applications</Link>
+
+            {" | "}
+
+            <Link to="/admin">Admin</Link>
+
+            {" | "}
+
             <button onClick={handleLogout}>
                 Logout
             </button>
