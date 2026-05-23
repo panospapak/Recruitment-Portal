@@ -48,3 +48,16 @@ export const updateMyProfile = async (profile) => {
 
     return response.data;
 };
+
+export const deleteMyProfile = async () => {
+    const token = localStorage.getItem("token");
+
+    await axios.delete(
+        `${API_URL}/me`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+};

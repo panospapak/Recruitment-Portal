@@ -31,4 +31,16 @@ public class JobPositionService {
 
         jobPositionRepository.deleteById(id);
     }
+    public JobPosition updateJob(Long id, JobPosition updatedJob) {
+        JobPosition existingJob = jobPositionRepository.findById(id)
+              .orElseThrow();
+
+        existingJob.setTitle(updatedJob.getTitle());
+        existingJob.setDescription(updatedJob.getDescription());
+        existingJob.setLocation(updatedJob.getLocation());
+        existingJob.setEmploymentType(updatedJob.getEmploymentType());
+        existingJob.setActive(updatedJob.isActive());
+
+        return jobPositionRepository.save(existingJob);
+    }
 }

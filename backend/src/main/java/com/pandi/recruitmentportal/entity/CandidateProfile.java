@@ -15,6 +15,10 @@ public class CandidateProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String bio;
+
+    private String skills;
+
     private String firstName;
 
     private String lastName;

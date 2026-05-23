@@ -63,4 +63,11 @@ public class JobPositionController {
     public void deleteJob(@PathVariable Long id) {
         jobPositionService.deleteJob(id);
     }
+    @PutMapping("/{id}")
+    public JobPosition updateJob(
+            @PathVariable Long id,
+            @RequestBody JobPosition jobPosition
+    ) {
+        return jobPositionService.updateJob(id, jobPosition);
+    }
 }

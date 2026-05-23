@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
     createMyProfile,
+    deleteMyProfile,
     getMyProfile,
     updateMyProfile
 } from "../services/profileService";
@@ -11,7 +12,11 @@ function ProfilePage() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [linkedinUrl, setLinkedinUrl] = useState("");
     const [cvUrl, setCvUrl] = useState("");
+    const [bio, setBio] = useState("");
+    const [skills, setSkills] = useState("");
+
     const [profileCreated, setProfileCreated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchProfile();
@@ -26,10 +31,14 @@ function ProfilePage() {
             setPhoneNumber(profile.phoneNumber || "");
             setLinkedinUrl(profile.linkedinUrl || "");
             setCvUrl(profile.cvUrl || "");
+            setBio(profile.bio || "");
+            setSkills(profile.skills || "");
 
             setProfileCreated(true);
         } catch (error) {
             setProfileCreated(false);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -38,7 +47,9 @@ function ProfilePage() {
         lastName,
         phoneNumber,
         linkedinUrl,
-        cvUrl
+        cvUrl,
+        bio,
+        skills
     };
 
     const handleSaveProfile = async () => {
@@ -55,6 +66,29 @@ function ProfilePage() {
             alert(error.response?.data?.message || "Failed to save profile");
         }
     };
+
+    const handleDeleteProfile = async () => {
+        try {
+            await deleteMyProfile();
+
+            setFirstName("");
+            setLastName("");
+            setPhoneNumber("");
+            setLinkedinUrl("");
+            setCvUrl("");
+            setBio("");
+            setSkills("");
+            setProfileCreated(false);
+
+            alert("Profile deleted successfully!");
+        } catch (error) {
+            alert(error.response?.data?.message || "Failed to delete profile");
+        }
+    };
+
+    if (loading) {
+        return <p>Loading profile...</p>;
+    }
 
     return (
         <div>
@@ -98,6 +132,22 @@ function ProfilePage() {
 
             <br /><br />
 
+            <textarea
+                placeholder="About me"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+            />
+
+            <br /><br />
+
+            <input
+                placeholder="Skills"
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
+            />
+
+            <br /><br />
+
             <input
                 placeholder="CV URL"
                 value={cvUrl}
@@ -109,6 +159,15 @@ function ProfilePage() {
             <button onClick={handleSaveProfile}>
                 {profileCreated ? "Update Profile" : "Create Profile"}
             </button>
+
+            {profileCreated && (
+                <>
+                    <br /><br />
+                    <button onClick={handleDeleteProfile}>
+                        Delete Profile
+                    </button>
+                </>
+            )}
         </div>
     );
 }

@@ -49,7 +49,19 @@ public class CandidateProfileService {
         existingProfile.setPhoneNumber(updatedProfile.getPhoneNumber());
         existingProfile.setLinkedinUrl(updatedProfile.getLinkedinUrl());
         existingProfile.setCvUrl(updatedProfile.getCvUrl());
+        existingProfile.setBio(updatedProfile.getBio());
+        existingProfile.setSkills(updatedProfile.getSkills());
 
         return candidateProfileRepository.save(existingProfile);
+    }
+
+    public void deleteProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow();
+
+        CandidateProfile profile = candidateProfileRepository.findByUser(user)
+                .orElseThrow();
+
+        candidateProfileRepository.delete(profile);
     }
 }
