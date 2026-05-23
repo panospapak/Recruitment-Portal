@@ -92,3 +92,19 @@ export const deleteJob = async (jobId) => {
         }
     );
 };
+
+export const updateJob = async (jobId, job) => {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.put(
+        `http://localhost:8080/api/jobs/${jobId}`,
+        job,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};

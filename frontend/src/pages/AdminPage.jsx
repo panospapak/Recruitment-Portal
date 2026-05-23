@@ -4,7 +4,8 @@ import {
     getJobs,
     getAllApplications,
     updateApplicationStatus,
-    deleteJob
+    deleteJob,
+    updateJob
 } from "../services/jobService";
 
 function AdminPage() {
@@ -15,6 +16,8 @@ function AdminPage() {
 
     const [jobs, setJobs] = useState([]);
     const [applications, setApplications] = useState([]);
+
+    const [editingJobId, setEditingJobId] = useState(null);
 
     const handleCreateJob = async () => {
         try {
@@ -75,6 +78,38 @@ function AdminPage() {
         }
     };
 
+    const handleEditJob = (job) => {
+        setEditingJobId(job.id);
+        setTitle(job.title);
+        setDescription(job.description);
+        setLocation(job.location);
+        setEmploymentType(job.employmentType);
+    };
+
+    const handleUpdateJob = async () => {
+        try {
+            await updateJob(editingJobId, {
+                title,
+                description,
+                location,
+                employmentType,
+                active: true
+            });
+
+            alert("Job updated successfully!");
+
+            setEditingJobId(null);
+            setTitle("");
+            setDescription("");
+            setLocation("");
+            setEmploymentType("");
+
+            fetchJobs();
+        } catch (error) {
+            alert(error.response?.data?.message || "Failed to update job");
+        }
+    };
+
     return (
         <div>
             <h1>Admin Dashboard</h1>
@@ -113,9 +148,15 @@ function AdminPage() {
 
             <br /><br />
 
-            <button onClick={handleCreateJob}>
-                Create Job
-            </button>
+            {editingJobId ? (
+                <button onClick={handleUpdateJob}>
+                     Update Job
+                </button>
+            ) : (
+                <button onClick={handleCreateJob}>
+                    Create Job
+                </button>
+            )}
 
             <hr />
 
@@ -131,6 +172,10 @@ function AdminPage() {
                     <p>{job.description}</p>
                     <p>{job.location}</p>
                     <p>{job.employmentType}</p>
+
+                    <button onClick={() => handleEditJob(job)}>
+                        Edit
+                    </button>
 
                     <button onClick={() => handleDeleteJob(job.id)}>
                         Delete
