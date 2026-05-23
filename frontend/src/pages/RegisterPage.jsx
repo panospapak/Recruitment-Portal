@@ -8,13 +8,28 @@ function RegisterPage() {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
+        if (!email || !password) {
+            alert("Email and password are required");
+            return;
+        }
+
+        if (!email.includes("@")) {
+            alert("Please enter a valid email");
+            return;
+        }
+
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters");
+            return;
+        }
+
         try {
             const data = await register(email, password);
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
 
-            navigate("/jobs");
+            navigate("/user");
         } catch (error) {
             alert(error.response?.data?.message || "Register failed");
         }
@@ -27,6 +42,7 @@ function RegisterPage() {
             <input
                 type="email"
                 placeholder="Email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
 
@@ -35,6 +51,7 @@ function RegisterPage() {
             <input
                 type="password"
                 placeholder="Password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
 

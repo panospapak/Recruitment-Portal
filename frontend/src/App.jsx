@@ -1,28 +1,46 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import JobsPage from "./pages/JobsPage";
-import Navbar from "./components/Navbar";
 import MyApplicationsPage from "./pages/MyApplicationsPage";
 import ProfilePage from "./pages/ProfilePage";
+
 import CreateJobPage from "./pages/CreateJobPage";
 import ManageJobsPage from "./pages/ManageJobsPage";
 import AdminApplicationsPage from "./pages/AdminApplicationsPage";
+
+import AdminHomePage from "./pages/AdminHomePage";
+import UserHomePage from "./pages/UserHomePage";
+
+import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (
     <BrowserRouter>
+
       <Navbar />
 
       <Routes>
+
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/jobs" element={<JobsPage />} />
 
-        {/* Protected user routes */}
+        {/* User home */}
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute>
+              <UserHomePage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* User protected routes */}
         <Route
           path="/my-applications"
           element={
@@ -31,12 +49,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/profile"
           element={
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
+          }
+        />
+
+        {/* Admin home */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminHomePage />
+            </AdminRoute>
           }
         />
 
@@ -49,6 +78,7 @@ function App() {
             </AdminRoute>
           }
         />
+
         <Route
           path="/admin/manage-jobs"
           element={
@@ -57,6 +87,7 @@ function App() {
             </AdminRoute>
           }
         />
+
         <Route
           path="/admin/applications"
           element={
@@ -65,7 +96,9 @@ function App() {
             </AdminRoute>
           }
         />
+
       </Routes>
+
     </BrowserRouter>
   );
 }
