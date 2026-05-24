@@ -61,3 +61,43 @@ export const deleteMyProfile = async () => {
         }
     );
 };
+
+export const uploadProfilePhoto = async (file) => {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axios.post(
+        `${API_URL}/me/photo`,
+        formData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    );
+
+    return response.data;
+};
+
+export const uploadCv = async (file) => {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axios.post(
+        `${API_URL}/me/cv`,
+        formData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    );
+
+    return response.data;
+};

@@ -17,15 +17,18 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 
+import HomePage from "./pages/HomePage";
+import AppLayout from "./components/AppLayout";
+
 function App() {
   return (
     <BrowserRouter>
 
-      <Navbar />
-
-      <Routes>
+      <AppLayout>
+          <Routes>
 
         {/* Public routes */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/jobs" element={<JobsPage />} />
@@ -97,8 +100,10 @@ function App() {
           }
         />
 
-      </Routes>
-
+          
+          </Routes>
+      
+      </AppLayout>
     </BrowserRouter>
   );
 }

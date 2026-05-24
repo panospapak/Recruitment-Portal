@@ -17,6 +17,10 @@ public class CandidateProfile {
 
     private String bio;
 
+    private String profilePhotoUrl;
+
+    private String cvFileUrl;
+
     private String skills;
 
     private String firstName;

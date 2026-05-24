@@ -15,10 +15,11 @@ function Navbar() {
     if (!token) {
         return (
             <nav>
+                <strong>Recruitment Portal</strong>
+                     
+                <Link to="/">Home</Link>     
                 <Link to="/jobs">Jobs</Link>
-                {" | "}
                 <Link to="/login">Login</Link>
-                {" | "}
                 <Link to="/register">Register</Link>
             </nav>
         );
@@ -27,13 +28,16 @@ function Navbar() {
     if (role === "USER") {
         return (
             <nav>
+                <strong>Recruitment Portal</strong>
+
+                <Link to="/">Home</Link>
                 <Link to="/jobs">Jobs</Link>
-                {" | "}
                 <Link to="/my-applications">My Applications</Link>
-                {" | "}
                 <Link to="/profile">Profile</Link>
-                {" | "}
-                <button onClick={handleLogout}>Logout</button>
+
+                <button className="secondary" onClick={handleLogout}>
+                    Logout
+                </button>
             </nav>
         );
     }
@@ -41,13 +45,16 @@ function Navbar() {
     if (role === "ADMIN") {
         return (
             <nav>
+                <strong>Recruitment Portal</strong>
+                 
+                <Link to="/">Home</Link>
                 <Link to="/admin/create-job">Create Jobs</Link>
-                {" | "}
                 <Link to="/admin/manage-jobs">Manage Jobs</Link>
-                {" | "}
                 <Link to="/admin/applications">Applications</Link>
-                {" | "}
-                <button onClick={handleLogout}>Logout</button>
+
+                <button className="secondary" onClick={handleLogout}>
+                    Logout
+                </button>
             </nav>
         );
     }
