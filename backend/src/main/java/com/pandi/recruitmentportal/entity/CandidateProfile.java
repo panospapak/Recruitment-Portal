@@ -27,11 +27,14 @@ public class CandidateProfile {
 
     private String lastName;
 
+    private String email;
+
+    private String address;
+
     private String phoneNumber;
 
     private String linkedinUrl;
 
-    private String cvUrl;
 
     @OneToOne
     @JoinColumn(name = "user_id")

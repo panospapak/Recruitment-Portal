@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getJobs, applyToJob } from "../services/jobService";
+import HiTechNavbar from "../components/HiTechNavbar";
 
 function JobsPage() {
     const [jobs, setJobs] = useState([]);
@@ -33,55 +34,42 @@ function JobsPage() {
         try {
             setApplyingJobId(jobId);
             await applyToJob(jobId);
-
             setMessage("Application submitted successfully!");
         } catch (error) {
-            setMessage(
-                error.response?.data?.message || "Application failed."
-            );
+            setMessage(error.response?.data?.message || "Application failed.");
         } finally {
             setApplyingJobId(null);
         }
     };
 
-    if (loading) {
-        return <p>Loading jobs...</p>;
-    }
-
     return (
-        <div>
-            <h1>Available Jobs</h1>
+        <>
+            <HiTechNavbar />
 
-            {message && <p>{message}</p>}
+            <div className="page">
+                <h1>Open Opportunities</h1>
 
-            {jobs.length === 0 && <p>No jobs available.</p>}
+                {loading && <p>Loading jobs...</p>}
+                {message && <p>{message}</p>}
+                {!loading && jobs.length === 0 && <p>No jobs available.</p>}
 
-            {jobs.map((job) => (
-                <div
-                    key={job.id}
-                    style={{
-                        border: "1px solid gray",
-                        padding: "10px",
-                        marginBottom: "10px"
-                    }}
-                >
-                    <h2>{job.title}</h2>
+                {jobs.map((job) => (
+                    <div className="card" key={job.id}>
+                        <h2>{job.title}</h2>
+                        <p>{job.description}</p>
+                        <p>{job.location}</p>
+                        <p>{job.employmentType}</p>
 
-                    <p>{job.description}</p>
-
-                    <p>{job.location}</p>
-
-                    <p>{job.employmentType}</p>
-
-                    <button
-                        onClick={() => handleApply(job.id)}
-                        disabled={applyingJobId === job.id}
-                    >
-                        {applyingJobId === job.id ? "Applying..." : "Apply"}
-                    </button>
-                </div>
-            ))}
-        </div>
+                        <button
+                            onClick={() => handleApply(job.id)}
+                            disabled={applyingJobId === job.id}
+                        >
+                            {applyingJobId === job.id ? "Applying..." : "Apply"}
+                        </button>
+                    </div>
+                ))}
+            </div>
+        </>
     );
 }
 

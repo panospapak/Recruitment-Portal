@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getJobs } from "../services/jobService";
+import HiTechNavbar from "../components/HiTechNavbar";
 
 function HomePage() {
     const [jobs, setJobs] = useState([]);
-
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
 
     useEffect(() => {
         fetchJobs();
@@ -21,57 +19,10 @@ function HomePage() {
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        window.location.href = "/";
-    };
-
     return (
         <div className="home-page">
             <section className="hi-hero">
-                <nav className="hi-hero-nav">
-                    <div className="hi-logo">
-                        <span className="hi-logo-mark">H</span>
-                        <span>Hi-Tech</span>
-                    </div>
-
-                    <div className="hi-nav-links">
-                        <Link to="/">Home</Link>
-                        <Link to="/jobs">Opportunities</Link>
-
-                        {!token && (
-                            <>
-                                <Link to="/login">Sign in</Link>
-                                <Link to="/register" className="hi-register">
-                                    Register
-                                </Link>
-                            </>
-                        )}
-
-                        {token && role === "USER" && (
-                            <>
-                                <Link to="/my-applications">My Applications</Link>
-                                <Link to="/profile">Profile</Link>
-                                <button className="hi-register" onClick={handleLogout}>
-                                    Logout
-                                </button>
-                            </>
-                        )}
-
-                        {token && role === "ADMIN" && (
-                            <>
-                                <Link to="/admin">Admin Home</Link>
-                                <Link to="/admin/create-job">Create Job</Link>
-                                <Link to="/admin/manage-jobs">Manage Jobs</Link>
-                                <Link to="/admin/applications">Applications</Link>
-                                <button className="hi-register" onClick={handleLogout}>
-                                    Logout
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </nav>
+                <HiTechNavbar />
 
                 <div className="hi-hero-content">
                     <div className="hi-hero-text">
@@ -85,8 +36,8 @@ function HomePage() {
 
                         <p>
                             At Hi-Tech, we build innovative solutions that power
-                            businesses and improve lives. Join a team of
-                            builders, thinkers and doers.
+                            businesses and improve lives. Join a team of builders,
+                            thinkers and doers.
                         </p>
 
                         <Link to="/jobs">
@@ -148,7 +99,7 @@ function HomePage() {
                     </p>
                 </div>
 
-                <Link to={token ? "/profile" : "/register"}>
+                <Link to={localStorage.getItem("token") ? "/profile" : "/register"}>
                     <button className="hi-primary-button">
                         Send us your CV →
                     </button>

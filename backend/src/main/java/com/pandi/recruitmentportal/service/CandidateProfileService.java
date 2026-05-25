@@ -47,6 +47,8 @@ public class CandidateProfileService {
         existingProfile.setFirstName(updatedProfile.getFirstName());
         existingProfile.setLastName(updatedProfile.getLastName());
         existingProfile.setPhoneNumber(updatedProfile.getPhoneNumber());
+        existingProfile.setEmail(updatedProfile.getEmail());
+        existingProfile.setAddress(updatedProfile.getAddress());
         existingProfile.setLinkedinUrl(updatedProfile.getLinkedinUrl());
         existingProfile.setCvUrl(updatedProfile.getCvUrl());
         existingProfile.setBio(updatedProfile.getBio());
