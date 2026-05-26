@@ -24,13 +24,19 @@ button {
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 button:hover {
   background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
 }
 
 button:disabled {
@@ -84,11 +90,13 @@ textarea {
 }
 
 .secondary {
-  background: #6b7280;
+  background: #e5e7eb !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db;
 }
 
 .secondary:hover {
-  background: #4b5563;
+  background: #dbe1e8 !important;
 }
 
 h2 {
@@ -1092,4 +1100,108 @@ h2 {
   padding: 12px 14px;
   border-radius: 12px;
   margin-top: 18px;
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.admin-dashboard-card {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  transition: 0.2s ease;
+  color: inherit;
+}
+
+.admin-dashboard-card:hover {
+  transform: translateY(-4px);
+}
+
+.admin-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: #eeeaff;
+  color: #4f46e5;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.admin-dashboard-card h2 {
+  margin-bottom: 10px;
+}
+
+.admin-dashboard-card p {
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.manage-edit-card {
+  margin-bottom: 28px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.manage-jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.manage-job-card {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  transition: 0.2s ease;
+}
+
+.manage-job-card:hover {
+  transform: translateY(-3px);
+}
+
+.manage-job-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.manage-job-top h2 {
+  margin: 0;
+}
+
+.manage-job-card p {
+  color: #6b7280;
+  line-height: 1.7;
+  max-width: 760px;
+}
+
+.manage-job-actions {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .manage-job-card,
+  .admin-actions,
+  .manage-job-actions {
+    flex-direction: column;
+  }
 }

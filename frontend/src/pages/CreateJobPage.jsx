@@ -57,11 +57,21 @@ function CreateJobPage() {
                             onChange={(e) => setTitle(e.target.value)}
                         />
 
-                        <input
-                            placeholder="Location e.g. Athens, Greece"
+                        <select
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
-                        />
+                        >
+                            <option value="">Select location</option>
+                            <option value="Athens, Greece">Athens, Greece</option>
+                            <option value="Thessaloniki, Greece">Thessaloniki, Greece</option>
+                            <option value="Patras, Greece">Patras, Greece</option>
+                            <option value="Berlin, Germany">Berlin, Germany</option>
+                            <option value="Munich, Germany">Munich, Germany</option>
+                            <option value="Hamburg, Germany">Hamburg, Germany</option>
+                            <option value="Brussels, Belgium">Brussels, Belgium</option>
+                            <option value="Antwerp, Belgium">Antwerp, Belgium</option>
+                            <option value="Ghent, Belgium">Ghent, Belgium</option>
+                        </select>
 
                         <select
                             value={employmentType}
