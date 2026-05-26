@@ -14,6 +14,7 @@ import AdminApplicationsPage from "./pages/AdminApplicationsPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import JobDetailsPage from "./pages/JobDetailsPage";
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/jobs" element={<JobsPage />} />
+                <Route path="/jobs/:id" element={<JobDetailsPage />} />
 
                 <Route
                     path="/my-applications"

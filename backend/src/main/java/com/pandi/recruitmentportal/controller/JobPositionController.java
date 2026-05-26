@@ -70,4 +70,9 @@ public class JobPositionController {
     ) {
         return jobPositionService.updateJob(id, jobPosition);
     }
+
+    @GetMapping("/{id}")
+    public JobPosition getJobById(@PathVariable Long id) {
+        return jobPositionService.getJobById(id);
+    }
 }

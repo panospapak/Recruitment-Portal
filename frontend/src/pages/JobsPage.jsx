@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { getJobs, applyToJob } from "../services/jobService";
-import HiTechNavbar from "../components/HiTechNavbar";
+import { Link } from "react-router-dom";
+import { getJobs } from "../services/jobService";
+import PageNavbar from "../components/PageNavbar";
 
 function JobsPage() {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [applyingJobId, setApplyingJobId] = useState(null);
-    const [message, setMessage] = useState("");
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedLocation, setSelectedLocation] = useState("All");
+    const [selectedType, setSelectedType] = useState("All");
 
     useEffect(() => {
         fetchJobs();
@@ -17,58 +20,133 @@ function JobsPage() {
             const data = await getJobs();
             setJobs(data);
         } catch (error) {
-            setMessage("Failed to load jobs.");
+            console.error(error);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleApply = async (jobId) => {
-        const token = localStorage.getItem("token");
+    const locations = [
+        "All",
+        ...new Set(jobs.map((job) => job.location).filter(Boolean))
+    ];
 
-        if (!token) {
-            setMessage("Please login first.");
-            return;
-        }
+    const employmentTypes = [
+        "All",
+        ...new Set(jobs.map((job) => job.employmentType).filter(Boolean))
+    ];
 
-        try {
-            setApplyingJobId(jobId);
-            await applyToJob(jobId);
-            setMessage("Application submitted successfully!");
-        } catch (error) {
-            setMessage(error.response?.data?.message || "Application failed.");
-        } finally {
-            setApplyingJobId(null);
-        }
-    };
+    const filteredJobs = jobs.filter((job) => {
+        const matchesSearch =
+            job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            job.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesLocation =
+            selectedLocation === "All" ||
+            job.location === selectedLocation;
+
+        const matchesType =
+            selectedType === "All" ||
+            job.employmentType === selectedType;
+
+        return matchesSearch && matchesLocation && matchesType;
+    });
 
     return (
         <>
-            <HiTechNavbar />
+            <PageNavbar />
 
-            <div className="page">
-                <h1>Open Opportunities</h1>
+            <main className="jobs-page">
+                <section className="jobs-hero compact">
+                    <p className="hi-label">Careers at Hi-Tech</p>
 
-                {loading && <p>Loading jobs...</p>}
-                {message && <p>{message}</p>}
-                {!loading && jobs.length === 0 && <p>No jobs available.</p>}
+                    <h1>Open opportunities</h1>
+                </section>
 
-                {jobs.map((job) => (
-                    <div className="card" key={job.id}>
-                        <h2>{job.title}</h2>
-                        <p>{job.description}</p>
-                        <p>{job.location}</p>
-                        <p>{job.employmentType}</p>
+                <section className="jobs-search-row improved">
+                    <input
+                        placeholder="Search opportunities"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
 
-                        <button
-                            onClick={() => handleApply(job.id)}
-                            disabled={applyingJobId === job.id}
-                        >
-                            {applyingJobId === job.id ? "Applying..." : "Apply"}
-                        </button>
+                    <select
+                        value={selectedLocation}
+                        onChange={(e) =>
+                            setSelectedLocation(e.target.value)
+                        }
+                    >
+                        {locations.map((location) => (
+                            <option
+                                key={location}
+                                value={location}
+                            >
+                                {location === "All"
+                                    ? "All locations"
+                                    : location}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select
+                        value={selectedType}
+                        onChange={(e) =>
+                            setSelectedType(e.target.value)
+                        }
+                    >
+                        {employmentTypes.map((type) => (
+                            <option
+                                key={type}
+                                value={type}
+                            >
+                                {type === "All"
+                                    ? "All work types"
+                                    : type}
+                            </option>
+                        ))}
+                    </select>
+                </section>
+
+                <section className="jobs-list-full">
+                    <h3>Featured roles</h3>
+
+                    {loading && (
+                        <p>Loading opportunities...</p>
+                    )}
+
+                    {!loading && filteredJobs.length === 0 && (
+                        <div className="jobs-empty">
+                            <h2>No roles found</h2>
+
+                            <p>
+                                Try another search, location
+                                or work type filter.
+                            </p>
+                        </div>
+                    )}
+
+                    <div className="jobs-list">
+                        {filteredJobs.map((job) => (
+                            <Link
+                                key={job.id}
+                                to={`/jobs/${job.id}`}
+                                className="jobs-list-card"
+                            >
+                                <div>
+                                    <h2>{job.title}</h2>
+
+                                    <p>
+                                        {job.location} ·{" "}
+                                        {job.employmentType}
+                                    </p>
+                                </div>
+
+                                <span>→</span>
+                            </Link>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </section>
+            </main>
         </>
     );
 }

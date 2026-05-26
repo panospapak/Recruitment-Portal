@@ -43,4 +43,8 @@ public class JobPositionService {
 
         return jobPositionRepository.save(existingJob);
     }
+    public JobPosition getJobById(Long id) {
+        return jobPositionRepository.findById(id)
+                .orElseThrow();
+    }
 }

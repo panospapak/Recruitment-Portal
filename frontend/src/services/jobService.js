@@ -108,3 +108,11 @@ export const updateJob = async (jobId, job) => {
 
     return response.data;
 };
+
+export const getJobById = async (jobId) => {
+    const response = await axios.get(
+        `http://localhost:8080/api/jobs/${jobId}`
+    );
+
+    return response.data;
+};

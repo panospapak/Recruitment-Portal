@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { createJob } from "../services/jobService";
+import PageNavbar from "../components/PageNavbar";
 
 function CreateJobPage() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
-    const [employmentType, setEmploymentType] = useState("");
+    const [employmentType, setEmploymentType] = useState("Hybrid");
+    const [message, setMessage] = useState("");
 
     const handleCreateJob = async () => {
+        if (!title || !description || !location || !employmentType) {
+            setMessage("Please fill in all fields.");
+            return;
+        }
+
         try {
             await createJob({
                 title,
@@ -17,35 +24,73 @@ function CreateJobPage() {
                 active: true
             });
 
-            alert("Job created successfully!");
+            setMessage("Job created successfully!");
 
             setTitle("");
             setDescription("");
             setLocation("");
-            setEmploymentType("");
+            setEmploymentType("Hybrid");
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to create job");
+            setMessage(error.response?.data?.message || "Failed to create job.");
         }
     };
 
     return (
-        <div>
-            <h1>Create Job</h1>
+        <>
+            <PageNavbar />
 
-            <input placeholder="Job title" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <br /><br />
+            <main className="admin-page">
+                <section className="admin-header">
+                    <p className="hi-label">Admin area</p>
+                    <h1>Create new opportunity</h1>
+                    <p>
+                        Add a new role to the Hi-Tech careers portal. Once created,
+                        candidates will be able to view and apply for it.
+                    </p>
+                </section>
 
-            <textarea placeholder="Job description" value={description} onChange={(e) => setDescription(e.target.value)} />
-            <br /><br />
+                <section className="admin-form-card">
+                    <div className="form-grid">
+                        <input
+                            placeholder="Job title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
 
-            <input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
-            <br /><br />
+                        <input
+                            placeholder="Location e.g. Athens, Greece"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                        />
 
-            <input placeholder="Employment type" value={employmentType} onChange={(e) => setEmploymentType(e.target.value)} />
-            <br /><br />
+                        <select
+                            value={employmentType}
+                            onChange={(e) => setEmploymentType(e.target.value)}
+                        >
+                            <option value="Remote">Remote</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="On-site">On-site</option>
+                        </select>
+                    </div>
 
-            <button onClick={handleCreateJob}>Create Job</button>
-        </div>
+                    <textarea
+                        placeholder="Job description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+
+                    {message && (
+                        <p className="admin-message">
+                            {message}
+                        </p>
+                    )}
+
+                    <button onClick={handleCreateJob}>
+                        Create Job
+                    </button>
+                </section>
+            </main>
+        </>
     );
 }
 

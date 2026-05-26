@@ -50,9 +50,8 @@ public class CandidateProfileService {
         existingProfile.setEmail(updatedProfile.getEmail());
         existingProfile.setAddress(updatedProfile.getAddress());
         existingProfile.setLinkedinUrl(updatedProfile.getLinkedinUrl());
-        existingProfile.setCvUrl(updatedProfile.getCvUrl());
         existingProfile.setBio(updatedProfile.getBio());
-        existingProfile.setSkills(updatedProfile.getSkills());
+        
 
         return candidateProfileRepository.save(existingProfile);
     }
