@@ -31,7 +31,11 @@ function LoginPage() {
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
 
-            navigate("/");
+            if (data.role === "ADMIN") {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
         } catch (error) {
             alert(error.response?.data?.message || "Login failed");
         }

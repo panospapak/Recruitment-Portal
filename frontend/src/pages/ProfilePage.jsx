@@ -23,6 +23,7 @@ function ProfilePage() {
 
     const [profileCreated, setProfileCreated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
 
     useEffect(() => {
         fetchProfile();
@@ -39,6 +40,7 @@ function ProfilePage() {
             setPhoneNumber(profile.phoneNumber || "");
             setLinkedinUrl(profile.linkedinUrl || "");
             setBio(profile.bio || "");
+            setProfilePhotoUrl(profile.profilePhotoUrl || "");
 
             setProfileCreated(true);
         } catch (error) {
@@ -145,9 +147,15 @@ function ProfilePage() {
                         <div className="profile-panel-top">
                             <div className="profile-identity">
                                 <div className="profile-avatar">
-                                    {firstName
-                                        ? firstName.charAt(0).toUpperCase()
-                                        : "H"}
+                                    {profilePhotoUrl ? (
+                                        <img
+                                            src={`http://localhost:8080${profilePhotoUrl}`}
+                                            alt="Profile"
+                                            className="profile-avatar-image"
+                                        />
+                                    ) : (
+                                         firstName ? firstName.charAt(0).toUpperCase() : "H"
+                                    )}
                                 </div>
 
                                 <div>

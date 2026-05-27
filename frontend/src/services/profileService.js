@@ -101,3 +101,18 @@ export const uploadCv = async (file) => {
 
     return response.data;
 };
+
+export const getProfileByUserId = async (userId) => {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(
+        `${API_URL}/user/${userId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};

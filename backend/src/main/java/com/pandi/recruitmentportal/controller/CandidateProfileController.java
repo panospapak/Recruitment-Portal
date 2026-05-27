@@ -129,4 +129,11 @@ public class CandidateProfileController {
 
         return candidateProfileService.updateProfile(user.getId(), profile);
     }
+
+    @GetMapping("/user/{userId}")
+    public CandidateProfile getProfileByUserId(
+            @PathVariable Long userId
+    ) {
+        return candidateProfileService.getProfileByUserId(userId);
+    }
 }

@@ -37,12 +37,17 @@ function HomePage() {
                     </div>
 
                     <div className="hi-nav-links">
-                        <Link to="/">Home</Link>
-                        <Link to="/jobs">Opportunities</Link>
-
                         {!token && (
                             <>
-                                <Link to="/login">Sign in</Link>
+                                <Link to="/">Home</Link>
+
+                                <Link to="/jobs">
+                                    Opportunities
+                                </Link>
+
+                                <Link to="/login">
+                                    Sign in
+                                </Link>
 
                                 <Link
                                     to="/register"
@@ -55,6 +60,12 @@ function HomePage() {
 
                         {token && role === "USER" && (
                             <>
+                                <Link to="/">Home</Link>
+
+                                <Link to="/jobs">
+                                    Opportunities
+                                </Link>
+
                                 <Link to="/my-applications">
                                     My Applications
                                 </Link>
@@ -76,6 +87,10 @@ function HomePage() {
                             <>
                                 <Link to="/admin">
                                     Admin Home
+                                </Link>
+
+                                <Link to="/jobs">
+                                    Opportunities
                                 </Link>
 
                                 <Link to="/admin/create-job">
@@ -184,8 +199,11 @@ function HomePage() {
                                 {job.location}
                             </span>
 
-                            <Link to={`/jobs/${job.id}`} className="hi-job-arrow">
-                               →
+                            <Link
+                                to={`/jobs/${job.id}`}
+                                className="hi-job-arrow"
+                            >
+                                →
                             </Link>
                         </div>
                     ))}
