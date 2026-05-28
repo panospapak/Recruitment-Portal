@@ -58,6 +58,12 @@ public class AuthController {
                 .orElseThrow();
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+
+            logger.warn(
+                    "Failed login attempt for email: {}",
+                    request.getEmail()
+            ); 
+
             throw new RuntimeException("Invalid credentials");
         }
         logger.info("User logged in with email: {}", user.getEmail());

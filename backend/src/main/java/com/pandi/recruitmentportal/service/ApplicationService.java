@@ -10,11 +10,16 @@ import com.pandi.recruitmentportal.repository.ApplicationRepository;
 import com.pandi.recruitmentportal.repository.JobPositionRepository;
 import com.pandi.recruitmentportal.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Service
 public class ApplicationService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ApplicationService.class);
 
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
@@ -31,46 +36,96 @@ public class ApplicationService {
     }
 
     public List<Application> getAllApplications() {
+
+        logger.info("Fetching all applications");
+
         return applicationRepository.findAll();
     }
 
-    public Application apply(Long userId, Long jobPositionId) {
+    public Application apply(
+            Long userId,
+            Long jobPositionId
+    ) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found")
+                        new ResourceNotFoundException(
+                                "User not found"
+                        )
                 );
 
-        JobPosition jobPosition = jobPositionRepository.findById(jobPositionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Job not found")
-                );
+        JobPosition jobPosition =
+                jobPositionRepository.findById(jobPositionId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Job not found"
+                                )
+                        );
 
-        if (applicationRepository.existsByUserAndJobPosition(user, jobPosition)) {
-            throw new DuplicateResourceException("User has already applied for this job");
+        if (applicationRepository.existsByUserAndJobPosition(
+                user,
+                jobPosition
+        )) {
+
+            logger.warn(
+                    "Duplicate application attempt by user {} for job {}",
+                    user.getEmail(),
+                    jobPosition.getTitle()
+            );
+
+            throw new DuplicateResourceException(
+                    "User has already applied for this job"
+            );
         }
 
         Application application = new Application();
 
         application.setUser(user);
+
         application.setJobPosition(jobPosition);
+
+        logger.info(
+                "User {} applied for job {}",
+                user.getEmail(),
+                jobPosition.getTitle()
+        );
 
         return applicationRepository.save(application);
     }
 
-    public Application updateStatus(Long applicationId, ApplicationStatus status) {
+    public Application updateStatus(
+            Long applicationId,
+            ApplicationStatus status
+    ) {
 
-        Application application = applicationRepository.findById(applicationId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Application not found")
-                );
+        Application application =
+                applicationRepository.findById(applicationId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Application not found"
+                                )
+                        );
 
         application.setStatus(status);
 
+        logger.info(
+                "Updated application {} status to {}",
+                applicationId,
+                status
+        );
+
         return applicationRepository.save(application);
     }
 
-    public List<Application> getApplicationsByUser(User user) {
-       return applicationRepository.findByUser(user);
+    public List<Application> getApplicationsByUser(
+            User user
+    ) {
+
+        logger.info(
+                "Fetching applications for user {}",
+                user.getEmail()
+        );
+
+        return applicationRepository.findByUser(user);
     }
 }
