@@ -31,9 +31,11 @@ public class ApplicationServiceTest {
 
         User user = new User();
         user.setId(1L);
+        user.setEmail("test@test.com");
 
         JobPosition jobPosition = new JobPosition();
         jobPosition.setId(1L);
+        jobPosition.setTitle("Backend Developer");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(jobPositionRepository.findById(1L)).thenReturn(Optional.of(jobPosition));

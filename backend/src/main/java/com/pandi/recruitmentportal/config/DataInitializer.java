@@ -30,6 +30,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
 
         createAdmin();
+        createDemoUser();
         createDemoJobs();
     }
 
@@ -45,6 +46,21 @@ public class DataInitializer implements CommandLineRunner {
             admin.setRole(Role.ADMIN);
 
             userRepository.save(admin);
+        }
+    }
+
+    private void createDemoUser() {
+
+       if (userRepository.findByEmail("user@test.com").isEmpty()) {
+
+          User user = new User();
+
+          user.setUsername("user@test.com");
+          user.setEmail("user@test.com");
+          user.setPassword(passwordEncoder.encode("user123"));
+          user.setRole(Role.USER);
+
+          userRepository.save(user);
         }
     }
 
