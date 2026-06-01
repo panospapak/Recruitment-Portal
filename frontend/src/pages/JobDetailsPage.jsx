@@ -85,6 +85,22 @@ function JobDetailsPage() {
         }
     };
 
+    const renderList = (text, fallbackItems) => {
+        const items = text
+            ?.split("\n")
+            .filter((item) => item.trim() !== "");
+
+        if (items && items.length > 0) {
+            return items.map((item, index) => (
+                <li key={index}>{item}</li>
+            ));
+        }
+
+        return fallbackItems.map((item, index) => (
+            <li key={index}>{item}</li>
+        ));
+    };
+
     if (loading) {
         return (
             <>
@@ -143,19 +159,23 @@ function JobDetailsPage() {
                         <section>
                             <h2>What you will do</h2>
                             <ul>
-                                <li>Build reliable and scalable software solutions.</li>
-                                <li>Collaborate with product, design and engineering teams.</li>
-                                <li>Contribute to clean architecture and maintainable code.</li>
-                                <li>Improve user experience through thoughtful technical decisions.</li>
+                                {renderList(job.responsibilities, [
+                                    "Build reliable and scalable software solutions.",
+                                    "Collaborate with product, design and engineering teams.",
+                                    "Contribute to clean architecture and maintainable code.",
+                                    "Improve user experience through thoughtful technical decisions."
+                                ])}
                             </ul>
                         </section>
 
                         <section>
                             <h2>What we value</h2>
                             <ul>
-                                <li>Problem-solving mindset.</li>
-                                <li>Ownership and clear communication.</li>
-                                <li>Interest in modern technologies and continuous learning.</li>
+                                {renderList(job.requirements, [
+                                    "Problem-solving mindset.",
+                                    "Ownership and clear communication.",
+                                    "Interest in modern technologies and continuous learning."
+                                ])}
                             </ul>
                         </section>
                     </main>

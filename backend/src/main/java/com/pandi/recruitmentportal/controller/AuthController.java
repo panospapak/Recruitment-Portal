@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthController.class);
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -34,6 +35,10 @@ public class AuthController {
     public AuthResponse register(@Valid @RequestBody AuthRequest request) {
       
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            logger.warn(
+                    "Registration failed. Email already exists: {}", 
+                     request.getEmail()
+            );
             throw new DuplicateResourceException("Email already exists");
         }
         User user = new User();

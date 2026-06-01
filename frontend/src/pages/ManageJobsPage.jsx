@@ -6,11 +6,15 @@ function ManageJobsPage() {
     const [jobs, setJobs] = useState([]);
     const [editingJobId, setEditingJobId] = useState(null);
     const [message, setMessage] = useState("");
+    const [jobToDelete, setJobToDelete] = useState(null);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
     const [employmentType, setEmploymentType] = useState("Hybrid");
+    const [responsibilities, setResponsibilities] = useState("");
+    const [requirements, setRequirements] = useState("");
+
     const editSectionRef = useRef(null);
 
     useEffect(() => {
@@ -32,6 +36,8 @@ function ManageJobsPage() {
         setDescription(job.description);
         setLocation(job.location);
         setEmploymentType(job.employmentType);
+        setResponsibilities(job.responsibilities || "");
+        setRequirements(job.requirements || "");
         setMessage("");
 
         editSectionRef.current?.scrollIntoView({
@@ -46,11 +52,20 @@ function ManageJobsPage() {
         setDescription("");
         setLocation("");
         setEmploymentType("Hybrid");
+        setResponsibilities("");
+        setRequirements("");
         setMessage("");
     };
 
     const handleUpdateJob = async () => {
-        if (!title || !description || !location || !employmentType) {
+        if (
+            !title ||
+            !description ||
+            !location ||
+            !employmentType ||
+            !responsibilities ||
+            !requirements
+        ) {
             setMessage("Please fill in all fields.");
             return;
         }
@@ -61,6 +76,8 @@ function ManageJobsPage() {
                 description,
                 location,
                 employmentType,
+                responsibilities,
+                requirements,
                 active: true
             });
 
@@ -72,18 +89,15 @@ function ManageJobsPage() {
         }
     };
 
-    const handleDeleteJob = async (jobId) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this job?"
-        );
-
-        if (!confirmed) {
+    const handleDeleteJob = async () => {
+        if (!jobToDelete) {
             return;
         }
 
         try {
-            await deleteJob(jobId);
+            await deleteJob(jobToDelete.id);
             setMessage("Job deleted successfully.");
+            setJobToDelete(null);
             fetchJobs();
         } catch (error) {
             setMessage(error.response?.data?.message || "Failed to delete job.");
@@ -150,6 +164,22 @@ function ManageJobsPage() {
                             onChange={(e) => setDescription(e.target.value)}
                         />
 
+                        <textarea
+                            placeholder="Responsibilities (one item per line)"
+                            value={responsibilities}
+                            onChange={(e) =>
+                                setResponsibilities(e.target.value)
+                            }
+                        />
+
+                        <textarea
+                            placeholder="Requirements (one item per line)"
+                            value={requirements}
+                            onChange={(e) =>
+                                setRequirements(e.target.value)
+                            }
+                        />
+
                         <div className="admin-actions">
                             <button onClick={handleUpdateJob}>
                                 Update Job
@@ -192,7 +222,7 @@ function ManageJobsPage() {
 
                                 <button
                                     className="danger"
-                                    onClick={() => handleDeleteJob(job.id)}
+                                    onClick={() => setJobToDelete(job)}
                                 >
                                     Delete
                                 </button>
@@ -200,6 +230,36 @@ function ManageJobsPage() {
                         </article>
                     ))}
                 </section>
+
+                {jobToDelete && (
+                    <div className="delete-modal-overlay">
+                        <div className="delete-modal">
+                            <h2>Delete opportunity?</h2>
+
+                            <p>
+                                Are you sure you want to delete{" "}
+                                <strong>{jobToDelete.title}</strong>?
+                                This action cannot be undone.
+                            </p>
+
+                            <div className="delete-modal-actions">
+                                <button
+                                    className="secondary"
+                                    onClick={() => setJobToDelete(null)}
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    className="danger"
+                                    onClick={handleDeleteJob}
+                                >
+                                    Delete Job
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </main>
         </>
     );

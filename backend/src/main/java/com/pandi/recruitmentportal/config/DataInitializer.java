@@ -70,7 +70,9 @@ public class DataInitializer implements CommandLineRunner {
                 "Java Backend Developer",
                 "Build scalable backend systems using Java and Spring Boot.",
                 "Athens, Greece",
-                "Hybrid"
+                "Hybrid",
+                "Develop REST APIs using Java and Spring Boot.\nDesign and optimize PostgreSQL database schemas.\nImplement secure authentication and authorization mechanisms.\nCollaborate with frontend developers to deliver full-stack features.",
+                "Strong Java fundamentals.\nKnowledge of Spring Boot and SQL.\nClean code and testing practices.\nTeamwork and communication skills."
         );
 
         createJob(
@@ -176,7 +178,9 @@ public class DataInitializer implements CommandLineRunner {
             String title,
             String description,
             String location,
-            String employmentType
+            String employmentType,
+            String responsibilities,
+            String requirements
     ) {
 
         if (jobPositionRepository.existsByTitle(title)) {
@@ -189,8 +193,26 @@ public class DataInitializer implements CommandLineRunner {
         job.setDescription(description);
         job.setLocation(location);
         job.setEmploymentType(employmentType);
+        job.setResponsibilities(responsibilities);
+        job.setRequirements(requirements);
         job.setActive(true);
 
         jobPositionRepository.save(job);
+    }
+
+    private void createJob(
+        String title,
+        String description,
+        String location,
+        String employmentType
+    ) {
+        createJob(
+            title,
+            description,
+            location,
+            employmentType,
+            "",
+            ""
+        );
     }
 }

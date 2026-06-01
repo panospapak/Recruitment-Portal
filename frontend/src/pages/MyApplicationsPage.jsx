@@ -1,36 +1,29 @@
 import { useEffect, useState } from "react";
 import { getMyApplications } from "../services/jobService";
+import { getMyNotifications } from "../services/notificationService";
 import PageNavbar from "../components/PageNavbar";
 
 function MyApplicationsPage() {
     const [applications, setApplications] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchApplications();
+        fetchPageData();
     }, []);
 
-    const fetchApplications = async () => {
+    const fetchPageData = async () => {
         try {
-            const data = await getMyApplications();
-            setApplications(data);
+            const applicationsData = await getMyApplications();
+            const notificationsData = await getMyNotifications();
+
+            setApplications(applicationsData);
+            setNotifications(notificationsData);
         } catch (error) {
             alert("Failed to load applications");
         } finally {
             setLoading(false);
         }
-    };
-
-    const getStatusClass = (status) => {
-        if (status === "ACCEPTED") {
-            return "status-badge accepted";
-        }
-
-        if (status === "REJECTED") {
-            return "status-badge rejected";
-        }
-
-        return "status-badge pending";
     };
 
     return (
@@ -48,6 +41,29 @@ function MyApplicationsPage() {
                         with your recruitment process at Hi-Tech.
                     </p>
                 </div>
+
+                {notifications.length > 0 && (
+                    <section className="notifications-panel">
+                        <h2>🔔 Application updates</h2>
+
+                        {notifications.map((notification) => (
+                            <div
+                                className="notification-card"
+                                key={notification.id}
+                            >
+                                <p style={{ whiteSpace: "pre-line" }}>
+                                    {notification.message}
+                                </p>
+
+                                <span>
+                                    {new Date(
+                                        notification.createdAt
+                                    ).toLocaleDateString()}
+                                </span>
+                            </div>
+                        ))}
+                    </section>
+                )}
 
                 {loading && <p>Loading applications...</p>}
 
@@ -67,14 +83,15 @@ function MyApplicationsPage() {
                             className="application-card"
                             key={application.id}
                         >
-                           <div className="application-top">
-                               <h2>{application.jobPosition.title}</h2>
+                            <div className="application-top">
+                                <h2>{application.jobPosition.title}</h2>
 
-                               <span className={`status-badge ${application.status.toLowerCase()}`}>
-                                   {application.status}
-                               </span>
-                           </div>
-
+                                <span
+                                    className={`status-badge ${application.status.toLowerCase()}`}
+                                >
+                                    {application.status}
+                                </span>
+                            </div>
 
                             <p className="application-location">
                                 {application.jobPosition.location}

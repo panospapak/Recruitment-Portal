@@ -87,6 +87,14 @@ public class JobPositionService {
                 updatedJob.getEmploymentType()
         );
 
+        existingJob.setResponsibilities(
+                updatedJob.getResponsibilities()
+        );
+
+        existingJob.setRequirements(
+                updatedJob.getRequirements()
+        );
+
         existingJob.setActive(
                 updatedJob.isActive()
         );

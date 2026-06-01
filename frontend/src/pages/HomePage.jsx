@@ -1,21 +1,48 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getJobs } from "../services/jobService";
+import {
+    hasUnreadNotifications,
+    markNotificationsAsRead
+} from "../services/notificationService";
 
 function HomePage() {
     const [jobs, setJobs] = useState([]);
+    const [hasUnread, setHasUnread] = useState(false);
 
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
     useEffect(() => {
         fetchJobs();
+        fetchUnreadNotifications();
     }, []);
 
     const fetchJobs = async () => {
         try {
             const data = await getJobs();
             setJobs(data.slice(0, 4));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchUnreadNotifications = async () => {
+        if (token && role === "USER") {
+            try {
+                const data = await hasUnreadNotifications();
+                setHasUnread(data);
+            } catch (error) {
+                setHasUnread(false);
+            }
+        }
+    };
+
+    const handleMyApplicationsClick = async () => {
+        setHasUnread(false);
+
+        try {
+            await markNotificationsAsRead();
         } catch (error) {
             console.error(error);
         }
@@ -40,14 +67,8 @@ function HomePage() {
                         {!token && (
                             <>
                                 <Link to="/">Home</Link>
-
-                                <Link to="/jobs">
-                                    Opportunities
-                                </Link>
-
-                                <Link to="/login">
-                                    Sign in
-                                </Link>
+                                <Link to="/jobs">Opportunities</Link>
+                                <Link to="/login">Sign in</Link>
 
                                 <Link
                                     to="/register"
@@ -66,8 +87,16 @@ function HomePage() {
                                     Opportunities
                                 </Link>
 
-                                <Link to="/my-applications">
+                                <Link
+                                    to="/my-applications"
+                                    className="nav-notification-link"
+                                    onClick={handleMyApplicationsClick}
+                                >
                                     My Applications
+
+                                    {hasUnread && (
+                                        <span className="nav-notification-dot"></span>
+                                    )}
                                 </Link>
 
                                 <Link to="/profile">

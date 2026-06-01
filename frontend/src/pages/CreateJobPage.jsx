@@ -7,10 +7,19 @@ function CreateJobPage() {
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
     const [employmentType, setEmploymentType] = useState("Hybrid");
+    const [responsibilities, setResponsibilities] = useState("");
+    const [requirements, setRequirements] = useState("");
     const [message, setMessage] = useState("");
 
     const handleCreateJob = async () => {
-        if (!title || !description || !location || !employmentType) {
+        if (
+            !title ||
+            !description ||
+            !location ||
+            !employmentType ||
+            !responsibilities ||
+            !requirements
+        ) {
             setMessage("Please fill in all fields.");
             return;
         }
@@ -21,6 +30,8 @@ function CreateJobPage() {
                 description,
                 location,
                 employmentType,
+                responsibilities,
+                requirements,
                 active: true
             });
 
@@ -30,6 +41,8 @@ function CreateJobPage() {
             setDescription("");
             setLocation("");
             setEmploymentType("Hybrid");
+            setResponsibilities("");
+            setRequirements("");
         } catch (error) {
             setMessage(error.response?.data?.message || "Failed to create job.");
         }
@@ -87,6 +100,18 @@ function CreateJobPage() {
                         placeholder="Job description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                    />
+
+                    <textarea
+                        placeholder="Responsibilities - write each point on a new line"
+                        value={responsibilities}
+                        onChange={(e) => setResponsibilities(e.target.value)}
+                    />
+
+                    <textarea
+                        placeholder="Requirements - write each point on a new line"
+                        value={requirements}
+                        onChange={(e) => setRequirements(e.target.value)}
                     />
 
                     {message && (

@@ -17,11 +17,18 @@ public class JobPosition {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String location;
 
     private String employmentType;
+
+    @Column(columnDefinition = "TEXT")
+    private String responsibilities;
+
+    @Column(columnDefinition = "TEXT")
+    private String requirements;
 
     private boolean active = true;
 }
