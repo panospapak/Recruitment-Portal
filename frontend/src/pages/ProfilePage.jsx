@@ -24,6 +24,7 @@ function ProfilePage() {
     const [profileCreated, setProfileCreated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         fetchProfile();
@@ -61,47 +62,60 @@ function ProfilePage() {
     };
 
     const handleSaveProfile = async () => {
+        if (
+            !firstName.trim() ||
+            !lastName.trim() ||
+            !email.trim()
+        ) {
+            setMessage("First name, last name and email are required.");
+            return;
+        }
+
         try {
             if (profileCreated) {
                 await updateMyProfile(profileData);
-                alert("Profile updated successfully!");
+                setMessage("Profile updated successfully!");
             } else {
                 await createMyProfile(profileData);
                 setProfileCreated(true);
-                alert("Profile created successfully!");
+                setMessage("Profile created successfully!");
             }
+
+            fetchProfile();
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to save profile");
+            setMessage(error.response?.data?.message || "Failed to save profile.");
         }
     };
 
     const handleUploadPhoto = async () => {
         if (!photoFile) {
-            alert("Please select a photo first");
+            setMessage("Please select a photo first.");
             return;
         }
 
         try {
             await uploadProfilePhoto(photoFile);
-            alert("Photo uploaded successfully!");
+            setMessage("Photo uploaded successfully!");
+            setPhotoFile(null);
             fetchProfile();
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to upload photo");
+            setMessage(error.response?.data?.message || "Failed to upload photo.");
         }
     };
 
     const handleUploadCv = async () => {
         if (!cvFile) {
-            alert("Please select a CV first");
+            setMessage("Please select a CV first.");
             return;
         }
 
         try {
             await uploadCv(cvFile);
-            alert("CV uploaded successfully!");
+            setMessage("CV uploaded successfully!");
+            setCvFile(null);
             fetchProfile();
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to upload CV");
+            setMessage(error.response?.data?.message || "Failed to upload CV.");
         }
     };
 
@@ -118,11 +132,12 @@ function ProfilePage() {
             setBio("");
             setPhotoFile(null);
             setCvFile(null);
+            setProfilePhotoUrl("");
             setProfileCreated(false);
 
-            alert("Profile deleted successfully!");
+            setMessage("Profile deleted successfully!");
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to delete profile");
+            setMessage(error.response?.data?.message || "Failed to delete profile.");
         }
     };
 
@@ -143,6 +158,12 @@ function ProfilePage() {
                         </p>
                     </div>
 
+                    {message && (
+                        <p className="admin-message">
+                            {message}
+                        </p>
+                    )}
+
                     <div className="profile-panel">
                         <div className="profile-panel-top">
                             <div className="profile-identity">
@@ -154,7 +175,9 @@ function ProfilePage() {
                                             className="profile-avatar-image"
                                         />
                                     ) : (
-                                         firstName ? firstName.charAt(0).toUpperCase() : "H"
+                                        firstName
+                                            ? firstName.charAt(0).toUpperCase()
+                                            : "H"
                                     )}
                                 </div>
 

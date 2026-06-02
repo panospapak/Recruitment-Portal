@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMyApplications } from "../services/jobService";
-import { getMyNotifications } from "../services/notificationService";
+import { getMyNotifications, markNotificationsAsRead } from "../services/notificationService";
 import PageNavbar from "../components/PageNavbar";
 
 function MyApplicationsPage() {
@@ -19,6 +19,7 @@ function MyApplicationsPage() {
 
             setApplications(applicationsData);
             setNotifications(notificationsData);
+            await markNotificationsAsRead();
         } catch (error) {
             alert("Failed to load applications");
         } finally {
